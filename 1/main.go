@@ -16,6 +16,10 @@ func main() {
 	fmt.Println(a)
 }
 
+/**
+这题可以不用一次性遍历完所有数组组建map
+可以一边循环数组，一边组建map
+*/
 func twoSum(nums []int, target int) []int {
 	m := make(map[int][]int)
 
