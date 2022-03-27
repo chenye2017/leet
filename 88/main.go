@@ -1,12 +1,19 @@
 package main
 
-func main() {
+import "fmt"
 
+func main() {
+	nums1 := []int{1, 2, 4, 5, 6, 0}
+	nums2 := []int{3}
+	merge(nums1, 5, nums2, 1)
+	fmt.Println(nums1)
 }
 
 func merge(nums1 []int, m int, nums2 []int, n int) {
 	if m == 0 {
-		nums1 = nums2
+		for k, v := range nums2 {
+			nums1[k] = v
+		}
 		return
 	}
 	if n == 0 {
@@ -18,27 +25,49 @@ func merge(nums1 []int, m int, nums2 []int, n int) {
 		for k, v := range nums2 {
 			nums1[m+k] = v
 		}
+		return
 	}
 	// num2 接在前面
 	if nums1[0] >= nums2[n-1] {
-		// num1 直接移动
+		// num1 直接移动 n 的位置
 		for k, v := range nums2 {
-			nums1[m+k] = nums1[k]
+			nums1[n+k] = nums1[k]
 			nums1[k] = v
 		}
-	}
-	// 正常合并
-	start := 0
-	for k, v := range nums2 {
-		for {
-			if v >= nums1[start] {
-				start++
-			} else {
-				for i:=m+k;{
-					nums1[m+k] = nums1[m]
-				}
-			}
-		}
+		return
 	}
 
+	// num1 后移元素 自己的len
+	for i := m - 1; i >= 0; i-- {
+		nums1[i+n] = nums1[i]
+	}
+
+	start := 0
+	num1Index := n
+	num2Index := 0
+
+	for {
+		if nums1[num1Index] > nums2[num2Index] {
+			nums1[start] = nums2[num2Index]
+			num2Index++
+		} else {
+			nums1[start] = nums1[num1Index]
+			num1Index++
+		}
+		start++
+
+		if start == m+n || num2Index == n {
+			break
+		}
+
+		if num1Index == m+n {
+			for i := num2Index; i < n; i++ {
+				nums1[start] = nums2[i]
+				start++
+			}
+			return
+		}
+
+	}
+	return
 }
